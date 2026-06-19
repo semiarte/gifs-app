@@ -1,30 +1,30 @@
 import { useState } from "react"
 import { GifList } from "./gifs/components/GifList"
 import { PreviousSearches } from "./gifs/components/PreviousSearches"
-import { mockGifs } from "./mock-data/gifs.mock"
 import { CustomHeader } from "./shared/components/CustomHeader"
 import { SearchBar } from "./shared/components/SearchBar"
+import { getGifsByQuery } from "./gifs/actions/get-gifs-by-query.actions"
+import type { Gif } from "./gifs/interfaces/gif.interface"
 
 export const GifApp = () => {
-    const [previousTerms, setPreviousTerms] = useState(['elden ring']);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [gifs, setGifs] = useState<Gif[]>([]);
+    const [previousTerms, setPreviousTerms] = useState<string[]>([]);
 
     const handleTermClicked = (term: string) => console.log(term);
 
-    const handleSearch = (query: string = '') => {
+    const handleSearch = async (query: string = '') => {
         // convierte el query a minúsculas y elimina espacio es blanco
         const term = query.toLowerCase().trim()
         // valida que query no esté vacío
-        if (term.length === 0) {
-            setErrorMessage('Por favor, escriba un término de búsqueda');
-            return;
-        } else {
-            setErrorMessage('')
-        };
+        if (term.length === 0) return;
         // evita búsquedas duplicadas
         if (previousTerms.includes(term)) return;
         // actualizar previous terms
         setPreviousTerms([term, ...previousTerms].slice(0, 8));
+
+        const gifs = await getGifsByQuery(query);
+
+        setGifs(gifs);
     }
 
     return (
@@ -32,7 +32,6 @@ export const GifApp = () => {
             <CustomHeader title="Buscador de Gifs" description="Descubre y comparte el Gif perfecto" />
             <SearchBar
                 placeholder="Buscar gifs"
-                error={errorMessage}
                 onQuery={handleSearch}
             />
             <PreviousSearches
@@ -40,7 +39,7 @@ export const GifApp = () => {
                 searches={previousTerms}
                 onLabelClicked={handleTermClicked}
             />
-            <GifList gifs={mockGifs} />
+            <GifList gifs={gifs} />
         </>
     )
 }

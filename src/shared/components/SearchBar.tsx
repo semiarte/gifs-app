@@ -2,11 +2,10 @@ import { useEffect, useState, type KeyboardEvent } from "react";
 
 interface SearchBarProps {
     placeholder?: string;
-    error: string;
     onQuery: (query: string) => void;
 }
 
-export const SearchBar = ({ placeholder = "Buscar", error, onQuery }: SearchBarProps) => {
+export const SearchBar = ({ placeholder = "Buscar", onQuery }: SearchBarProps) => {
     const [query, setQuery] = useState('');
 
     useEffect(() => {
@@ -31,18 +30,15 @@ export const SearchBar = ({ placeholder = "Buscar", error, onQuery }: SearchBarP
     }
 
     return (
-        <>
-            <div className="search-container">
-                <input
-                    type="text"
-                    placeholder={placeholder}
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    onKeyDown={handleKeyDown}
-                />
-                <button onClick={handleSearch}>Buscar</button>
-            </div>
-            <p style={{ color: 'red' }}>{error}</p>
-        </>
+        <div className="search-container">
+            <input
+                type="text"
+                placeholder={placeholder}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={handleKeyDown}
+            />
+            <button onClick={handleSearch}>Buscar</button>
+        </div>
     )
 }
