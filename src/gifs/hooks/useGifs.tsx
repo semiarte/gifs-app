@@ -25,10 +25,10 @@ export const useGifs = () => {
         if (previousTerms.includes(term)) return;
         setPreviousTerms([term, ...previousTerms].slice(0, 8));
 
-        const gifs = await getGifsByQuery(query);
+        const gifs = await getGifsByQuery(term);
         setGifs(gifs);
 
-        gifCache.current[query] = gifs;
+        gifCache.current[term] = gifs;
         console.log(gifCache.current);
     }
     return {
