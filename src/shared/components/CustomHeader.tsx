@@ -5,7 +5,7 @@ interface CustomHeaderProps {
 
 export const CustomHeader = ({ title, description }: CustomHeaderProps) => {
     return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }} className="content-center">
             <h1>{title}</h1>
             {
                 description && (
